@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>内部障害理学療法</title>
+<meta name="description" content="循環・呼吸・腎臓の○×200問。臨床実習前の学習用。">
+<meta name="theme-color" content="#3a55d9">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="内部障害PT">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px)}
+</style>
+<style>
+/* Layout: one column up to 640px; the ○× bar is fixed at the bottom for thumbs; one tap answers, one tap advances. */
+:root{
+  --bg:#eef1f6; --card:#ffffff; --fg:#1b2430; --muted:#5f6b7a; --line:#d8dee8;
+  --accent:#3a55d9; --accent-ink:#ffffff; --accent-soft:#e4e9fb;
+  --ok:#1f9d55; --ok-soft:#dff5e8; --ng:#d43f4f; --ng-soft:#fde3e6; --case:#fff4d6; --case-line:#e3b84a;
+  --display:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Noto Sans JP",sans-serif;
+  --body:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --radius:16px; --shadow:0 1px 2px rgba(27,36,48,.06),0 8px 24px rgba(27,36,48,.07);
+  --barh:96px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121821; --card:#1b2430; --fg:#e9edf3; --muted:#9aa7b8; --line:#2d3947;
+  --accent:#8ea0ff; --accent-ink:#0f1630; --accent-soft:#232d49;
+  --ok:#5fd38c; --ok-soft:#163a26; --ng:#ff8a94; --ng-soft:#4a222a; --case:#3a3220; --case-line:#b8922e;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121821; --card:#1b2430; --fg:#e9edf3; --muted:#9aa7b8; --line:#2d3947;
+  --accent:#8ea0ff; --accent-ink:#0f1630; --accent-soft:#232d49;
+  --ok:#5fd38c; --ok-soft:#163a26; --ng:#ff8a94; --ng-soft:#4a222a; --case:#3a3220; --case-line:#b8922e;
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.7;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:640px;margin:0 auto;padding-block:14px 40px;padding-inline:16px;min-height:100%}
+body.playing .wrap{padding-bottom:calc(var(--barh) + env(safe-area-inset-bottom,0px) + 24px)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.3}
+h1{font-size:1.5rem;font-weight:800}
+h2{font-size:1.15rem;font-weight:700}
+h3{font-size:1rem;font-weight:700}
+p{margin:0}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:10px 18px;background:var(--card);color:var(--fg);transition:background .15s,transform .05s}
+button:active{transform:scale(.98)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:700;padding:14px 26px;font-size:1.05rem}
+button.primary:disabled{opacity:.45;cursor:not-allowed}
+button.ghost{background:transparent;white-space:nowrap}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.brand small{display:block;color:var(--muted);font-size:.85rem}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.label{font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.chip{border-radius:999px;padding:8px 15px;font-size:.95rem}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.stat{background:var(--accent-soft);border-radius:12px;padding:10px 12px}
+.stat b{font-family:var(--display);font-size:1.5rem;font-weight:800;display:block;font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:3.5em 1fr 4.5em;align-items:center;gap:8px;font-size:.9rem}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar i b{display:block;height:100%;background:var(--accent)}
+.bar span{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.toggle{display:flex;align-items:center;gap:10px;font-size:.95rem;cursor:pointer}
+.toggle input{width:20px;height:20px;accent-color:var(--accent)}
+.sel-count{font-size:.85rem;color:var(--muted)}
+.foot{color:var(--muted);font-size:.8rem;margin-top:24px;text-align:center}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.85rem;color:var(--muted)}
+.tag{border-radius:6px;padding:1px 8px;background:var(--accent-soft);color:var(--fg);font-size:.8rem;font-weight:700}
+.progress{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin:8px 0 2px}
+.progress b{display:block;height:100%;background:var(--accent);transition:width .25s}
+.streak{font-family:var(--display);font-weight:700;color:var(--accent);font-size:.95rem}
+.qcard{cursor:default}
+.qcard.answered{cursor:pointer}
+.case{background:var(--case);border-left:4px solid var(--case-line);border-radius:10px;padding:10px 14px;font-size:.98rem;line-height:1.75}
+.case b{font-family:var(--display);display:block;font-size:.8rem;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.stmt{font-family:var(--display);font-size:1.3rem;font-weight:700;line-height:1.65;padding-block:6px}
+.stmt .q{color:var(--accent);margin-right:.2em}
+.verdict{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:1.3rem}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)} .verdict.ng{background:var(--ng-soft);color:var(--ng)}
+.verdict small{font-family:var(--body);font-weight:500;font-size:.95rem;color:var(--fg)}
+.reason{font-size:1rem;line-height:1.75}
+.nexthint{text-align:center;color:var(--muted);font-size:.85rem;padding-top:4px}
+/* fixed bottom bar */
+.bar-fixed{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(27,36,48,.08)}
+.bar-fixed .inner{max-width:640px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ox-btn{font-family:var(--display);font-size:2.2rem;font-weight:800;padding:12px;border-radius:16px;border:2px solid var(--line);background:var(--card);line-height:1;min-height:72px}
+.ox-btn small{display:block;font-family:var(--body);font-size:.8rem;font-weight:500;color:var(--muted);margin-top:2px}
+.ox-btn.o{color:var(--ok)} .ox-btn.x{color:var(--ng)}
+.ox-btn.hit{background:var(--ok-soft);border-color:var(--ok)} .ox-btn.miss{background:var(--ng-soft);border-color:var(--ng)}
+.ox-btn[disabled]{cursor:default;opacity:.9}
+.next-btn{grid-column:1/3;min-height:72px;font-size:1.2rem}
+.wronglist{display:flex;flex-direction:column;gap:8px;padding-left:1.2em;margin:0;font-size:.95rem}
+.wronglist li span{color:var(--muted);font-size:.85rem}
+.result-hero{text-align:center;display:flex;flex-direction:column;gap:6px;padding-block:8px}
+.result-hero b{font-family:var(--display);font-size:3rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.msg{font-family:var(--display);font-weight:700;font-size:1.1rem}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:420px){.bar{grid-template-columns:3em 1fr 4em}.stmt{font-size:1.2rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <h1>内部障害理学療法</h1>
+      <small>循環・呼吸・腎臓｜○×200問</small>
+    </div>
+    <button class="ghost" id="btn-home" hidden>ホーム</button>
+  </div>
+
+  <!-- HOME -->
+  <section id="home" class="stack">
+    <div class="card stack">
+      <h2>今日の1セット</h2>
+      <div class="stack" style="gap:10px">
+        <div class="label">領域</div>
+        <div class="row" id="pick-domain"></div>
+        <div class="label">出題数</div>
+        <div class="row" id="pick-n"></div>
+        <div class="label">出し方</div>
+        <div class="row" id="pick-mode"></div>
+      </div>
+      <label class="toggle"><input type="checkbox" id="opt-auto"> 正解したら1.5秒で自動で次へ（不正解は止まる）</label>
+      <p class="sel-count" id="pool-info"></p>
+      <div class="actions"><button class="primary" id="btn-start">スタート</button></div>
+    </div>
+
+    <div class="card stack">
+      <h2>これまでの記録</h2>
+      <div class="stats">
+        <div class="stat"><b id="st-solved">0</b><span>解いた回数</span></div>
+        <div class="stat"><b id="st-rate">–</b><span>正答率</span></div>
+        <div class="stat"><b id="st-best">0</b><span>最長連続正解</span></div>
+        <div class="stat"><b id="st-cover">0/200</b><span>解いた問題</span></div>
+      </div>
+      <div class="bars" id="domain-bars"></div>
+      <p class="sel-count" id="offline-badge" hidden>このアプリは端末に保存されました。通信がない場所でも、ホーム画面やブラウザから開いて使えます。</p>
+      <p class="sel-count">記録はこの端末のブラウザにだけ保存されます。○と×は、1セットの中で同じ数になるように出ます。</p>
+      <div class="actions"><button class="ghost" id="btn-reset">記録を消す</button></div>
+    </div>
+    <p class="foot" id="foot"></p>
+  </section>
+
+  <!-- PLAY -->
+  <section id="play" class="stack" hidden>
+    <div>
+      <div class="meta"><span id="q-pos"></span><span class="streak" id="q-streak"></span></div>
+      <div class="progress"><b id="q-bar" style="width:0%"></b></div>
+    </div>
+    <div class="card stack qcard" id="q-card"></div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="stack" hidden>
+    <div class="card stack">
+      <div class="result-hero">
+        <span class="label">今回の結果</span>
+        <b id="r-score"></b>
+        <p class="msg" id="r-msg"></p>
+      </div>
+      <div class="bars" id="r-bars"></div>
+      <div id="r-wrong" class="stack"></div>
+      <div class="actions">
+        <button id="btn-retry-wrong">間違えた問題だけ、もう一回</button>
+        <button class="primary" id="btn-again">同じ条件でもう1セット</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="bar-fixed" id="bar" hidden>
+  <div class="inner" id="bar-inner"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const KEY="naibu-ox200-v1";
+let DATA=null, prog=load(), pool=[], idx=0, session=null, answered=false, timer=null;
+const sel={domain:"すべて",n:20,mode:"random"};
+
+function load(){let p={hist:{},best:0,auto:false};try{const s=localStorage.getItem(KEY);if(s)p=Object.assign(p,JSON.parse(s))}catch(e){}return p}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(prog))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+// ---- home ----
+function chips(el,items,key,fmt){el.innerHTML="";items.forEach(v=>{const b=document.createElement("button");b.className="chip";b.textContent=fmt?fmt(v):v;b.setAttribute("aria-pressed",String(sel[key]===v));b.onclick=()=>{sel[key]=v;chips(el,items,key,fmt);updatePool()};el.appendChild(b)})}
+function filtered(){return DATA.items.filter(q=>sel.domain==="すべて"||q.domain===sel.domain)}
+function buildPool(){
+  let qs=filtered();const H=prog.hist;
+  if(sel.mode==="case")qs=qs.filter(q=>q.case);
+  if(sel.mode==="wrong")qs=qs.filter(q=>{const h=H[q.id];return h&&h.w>0&&h.last!=="ok"});
+  if(sel.mode==="new")qs=qs.filter(q=>!H[q.id]);
+  const t=shuffle(qs.filter(q=>q.answer)),f=shuffle(qs.filter(q=>!q.answer));
+  const n=sel.n==="all"?qs.length:Math.min(sel.n,qs.length);
+  const half=Math.min(Math.floor(n/2),t.length,f.length);
+  let out=t.slice(0,half).concat(f.slice(0,half));
+  const rest=shuffle(t.slice(half).concat(f.slice(half)));
+  out=out.concat(rest.slice(0,n-out.length));
+  return shuffle(out);
+}
+function updatePool(){
+  pool=buildPool();
+  const base=filtered();
+  let t=`対象 ${base.length}問`;
+  if(sel.mode==="case")t=`症例問題 ${base.filter(q=>q.case).length}問`;
+  if(sel.mode==="wrong")t=`間違えたままの問題 ${pool.length}問`;
+  if(sel.mode==="new")t=`まだ解いていない問題 ${pool.length}問`;
+  $("#pool-info").textContent=t+`／今回 ${pool.length}問`;
+  $("#btn-start").disabled=pool.length===0;
+}
+function renderHome(){
+  chips($("#pick-domain"),["すべて",...DATA.meta.domains],"domain");
+  chips($("#pick-n"),[10,20,50,"all"],"n",v=>v==="all"?"全部":v+"問");
+  chips($("#pick-mode"),["random","case","wrong","new"],"mode",v=>({random:"ランダム",case:"症例だけ",wrong:"間違えた問題",new:"未出題"}[v]));
+  $("#opt-auto").checked=!!prog.auto;
+  updatePool();
+  const H=Object.values(prog.hist);
+  const solved=H.reduce((a,h)=>a+h.r+h.w,0),ok=H.reduce((a,h)=>a+h.r,0);
+  $("#st-solved").textContent=solved;$("#st-rate").textContent=solved?Math.round(ok/solved*100)+"%":"–";
+  $("#st-best").textContent=prog.best||0;$("#st-cover").textContent=`${H.length}/${DATA.items.length}`;
+  const bars=$("#domain-bars");bars.innerHTML="";
+  DATA.meta.domains.forEach(d=>{
+    const qs=DATA.items.filter(q=>q.domain===d);let r=0,w=0;qs.forEach(q=>{const h=prog.hist[q.id];if(h){r+=h.r;w+=h.w}});
+    const pct=r+w?Math.round(r/(r+w)*100):0;
+    bars.insertAdjacentHTML("beforeend",`<div class="bar"><span style="text-align:left;color:var(--fg)">${d}</span><i><b style="width:${pct}%"></b></i><span>${r+w?pct+"%":"未着手"}</span></div>`);
+  });
+  const nc=DATA.items.filter(q=>q.case).length;
+  $("#foot").textContent=`問題データ ${DATA.meta.version} 版・${DATA.items.length}問（症例問題${nc}問）`;
+}
+
+// ---- play ----
+function show(id){["home","play","result"].forEach(s=>$("#"+s).hidden=s!==id);$("#btn-home").hidden=id==="home";$("#bar").hidden=id!=="play";document.body.classList.toggle("playing",id==="play");window.scrollTo({top:0})}
+function start(list){clearTimeout(timer);session={list,results:[],streak:0};idx=0;show("play");renderQ()}
+function renderQ(){
+  const q=session.list[idx];answered=false;
+  $("#q-pos").textContent=`${idx+1} / ${session.list.length}`;
+  $("#q-bar").style.width=(idx/session.list.length*100)+"%";
+  $("#q-streak").textContent=session.streak>=2?`${session.streak}連続正解中`:"";
+  const card=$("#q-card");card.classList.remove("answered");
+  card.innerHTML=`<div class="meta"><span class="tag">${esc(q.domain)}</span><span>${esc(q.topic)}</span></div>`
+    +(q.case?`<div class="case"><b>症例</b>${esc(q.case)}</div>`:"")
+    +`<p class="stmt"><span class="q">Q.</span>${esc(q.text)}</p><div id="feedback"></div>`;
+  $("#bar-inner").innerHTML=`<button class="ox-btn o" data-a="1">○<small>正しい</small></button><button class="ox-btn x" data-a="0">×<small>誤り</small></button>`;
+  document.querySelectorAll(".ox-btn").forEach(b=>b.onclick=()=>answer(q,b.dataset.a==="1"));
+}
+function answer(q,mine){
+  if(answered)return;answered=true;
+  const ok=mine===q.answer;
+  const h=prog.hist[q.id]||(prog.hist[q.id]={r:0,w:0,last:""});
+  if(ok){h.r++;h.last="ok";session.streak++;if(session.streak>(prog.best||0))prog.best=session.streak}else{h.w++;h.last="ng";session.streak=0}
+  save();session.results.push({q,ok,mine});
+  document.querySelectorAll(".ox-btn").forEach(b=>{b.setAttribute("disabled","");const v=b.dataset.a==="1";if(v===q.answer)b.classList.add("hit");else if(v===mine)b.classList.add("miss")});
+  const last=idx===session.list.length-1;
+  const praise=ok?(session.streak>=10?"10連続。身についている。":session.streak>=5?"絶好調。":"正解。"):"惜しい。理由を読んで次へ。";
+  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>答え：${q.answer?"○":"×"}　${praise}</small></div><p class="reason">${esc(q.reason)}</p><p class="nexthint">画面のどこかをタップして${last?"結果へ":"次へ"}</p>`;
+  $("#q-streak").textContent=session.streak>=2?`${session.streak}連続正解中`:"";
+  const card=$("#q-card");card.classList.add("answered");
+  setTimeout(()=>{ // a beat so the verdict is seen before the bar becomes the next button
+    $("#bar-inner").innerHTML=`<button class="primary next-btn" id="btn-next">${last?"結果を見る":"次の問題"}</button>`;
+    $("#btn-next").onclick=next;
+  },250);
+  card.onclick=e=>{if(answered)next()};
+  if(ok&&prog.auto){timer=setTimeout(next,1500)}
+}
+function next(){
+  if(!answered)return;clearTimeout(timer);$("#q-card").onclick=null;
+  idx++;if(idx>=session.list.length)finish();else renderQ();
+}
+function finish(){
+  const R=session.results,ok=R.filter(r=>r.ok).length,n=R.length,pct=Math.round(ok/n*100);
+  $("#r-score").textContent=`${ok} / ${n}`;
+  $("#r-msg").textContent=pct===100?"全問正解。":pct>=80?"よくできている。間違えた理由を読み直そう。":pct>=60?"あと一歩。弱い領域を選んでもう1セット。":"基礎から。領域を1つに絞って繰り返そう。";
+  const bars=$("#r-bars");bars.innerHTML="";
+  DATA.meta.domains.forEach(d=>{const rs=R.filter(r=>r.q.domain===d);if(!rs.length)return;const o=rs.filter(r=>r.ok).length;const p=Math.round(o/rs.length*100);
+    bars.insertAdjacentHTML("beforeend",`<div class="bar"><span style="text-align:left;color:var(--fg)">${d}</span><i><b style="width:${p}%"></b></i><span>${o}/${rs.length}</span></div>`)});
+  const wrong=R.filter(r=>!r.ok);
+  $("#r-wrong").innerHTML=wrong.length?`<h3>間違えた問題</h3><ol class="wronglist">${wrong.map(r=>`<li>${esc(r.q.text)}<br><span>答え ${r.q.answer?"○":"×"}　${esc(r.q.reason)}</span></li>`).join("")}</ol>`:`<p>間違えた問題はありません。</p>`;
+  $("#btn-retry-wrong").hidden=!wrong.length;
+  $("#btn-retry-wrong").onclick=()=>start(shuffle(wrong.map(r=>r.q)));
+  $("#btn-again").onclick=()=>{updatePool();start(pool)};
+  show("result");
+}
+
+// ---- wiring ----
+$("#btn-start").onclick=()=>{updatePool();start(pool)};
+$("#btn-home").onclick=()=>{clearTimeout(timer);renderHome();show("home")};
+$("#opt-auto").onchange=e=>{prog.auto=e.target.checked;save()};
+$("#btn-reset").onclick=()=>{const b=$("#btn-reset");if(b.dataset.arm){prog={hist:{},best:0,auto:prog.auto};save();renderHome();b.textContent="記録を消す";delete b.dataset.arm}else{b.dataset.arm="1";b.textContent="本当に消す？（もう一度押す）"}};
+document.addEventListener("keydown",e=>{ // tablets with a keyboard: o / x / Enter
+  if($("#play").hidden)return;
+  if(!answered){if(e.key==="o"||e.key==="O"||e.key==="ArrowLeft")document.querySelector(".ox-btn.o")?.click();if(e.key==="x"||e.key==="X"||e.key==="ArrowRight")document.querySelector(".ox-btn.x")?.click()}
+  else if(e.key==="Enter"||e.key===" "||e.key==="ArrowRight"){e.preventDefault();next()}
+});
+
+fetch("./data.json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(d=>{DATA=d;renderHome()}).catch(()=>{
+  $("#home").innerHTML=`<div class="card"><h2>問題データを読み込めませんでした</h2><p>ページを開き直しても直らないときは、先生に連絡してください。</p></div>`;
+});
+
+// ---- offline (PWA) ----
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").then(()=>navigator.serviceWorker.ready).then(()=>{
+      const f=document.querySelector("#foot");if(f)f.dataset.offline="1";
+      const b=document.querySelector("#offline-badge");if(b)b.hidden=false;
+    }).catch(()=>{});
+  });
+}
+})();
+</script>
+</body>
+</html>
