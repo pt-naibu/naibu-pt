@@ -1,0 +1,33 @@
+{
+  "name": "内部障害理学療法",
+  "short_name": "内部障害PT",
+  "description": "循環・呼吸・腎臓の○×200問と練習問題100問（5肢）。臨床実習前の学習用。",
+  "id": "./",
+  "start_url": "./?icon=purple",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef1f6",
+  "theme_color": "#7b4fd6",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "./icons/icon-purple-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-purple-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-purple-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -4,27 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>内部障害理学療法</title>
-<meta name="description" content="循環・呼吸・腎臓の○×200問。臨床実習前の学習用。">
+<meta name="description" content="循環・呼吸・腎臓の○×200問と練習問題100問（5肢）。臨床実習前の学習用。">
 <meta name="theme-color" content="#3a55d9">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="icon" href="./icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest" id="lnk-manifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png" id="lnk-icon">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" id="lnk-apple">
+<script>
+/* Icon colour: ?icon=<name> in the URL wins, else the saved choice. Set before the body renders so
+   "Add to Home Screen" (iOS reads apple-touch-icon, Android reads the manifest) picks up the chosen colour. */
+(function(){
+  var ICONS={blue:"#3a55d9",green:"#1f9d55",orange:"#e8731f",purple:"#7b4fd6"};
+  var q=new URLSearchParams(location.search).get("icon"),saved="";
+  try{var u=JSON.parse(localStorage.getItem("naibu-ui-v1")||"{}");saved=u.icon||""}catch(e){}
+  var name=ICONS[q]?q:(ICONS[saved]?saved:"blue");
+  window.__ICON=name;
+  document.documentElement.setAttribute("data-icon",name);
+  var m=document.getElementById("lnk-manifest"),i=document.getElementById("lnk-icon"),a=document.getElementById("lnk-apple"),t=document.querySelector('meta[name="theme-color"]');
+  if(name!=="blue"){m.href="./manifest-"+name+".webmanifest";i.href="./icons/icon-"+name+"-192.png";a.href="./icons/apple-touch-icon-"+name+".png"}
+  if(t)t.content=ICONS[name];
+})();
+</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="内部障害PT">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap">
 <style>
 :root{padding-top:env(safe-area-inset-top,0px)}
 </style>
 <style>
-/* Layout: one column up to 640px; the ○× bar is fixed at the bottom for thumbs; one tap answers, one tap advances. */
+/* Layout: one column up to 640px; the answer bar is fixed at the bottom for thumbs; one tap answers, one tap advances.
+   Two courses share the shell: ○× (1問1答) and 5肢 (練習問題100問). */
 :root{
   --bg:#eef1f6; --card:#ffffff; --fg:#1b2430; --muted:#5f6b7a; --line:#d8dee8;
   --accent:#3a55d9; --accent-ink:#ffffff; --accent-soft:#e4e9fb;
   --ok:#1f9d55; --ok-soft:#dff5e8; --ng:#d43f4f; --ng-soft:#fde3e6; --case:#fff4d6; --case-line:#e3b84a;
-  --display:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Noto Sans JP",sans-serif;
-  --body:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  /* 端末に入っているフォントだけを使う（外部へのフォント取得なし） */
+  --display:"Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP","Noto Sans CJK JP","Yu Gothic",sans-serif;
+  --body:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP","Yu Gothic",sans-serif;
   --radius:16px; --shadow:0 1px 2px rgba(27,36,48,.06),0 8px 24px rgba(27,36,48,.07);
   --barh:96px;
 }
@@ -38,6 +54,22 @@
   --accent:#8ea0ff; --accent-ink:#0f1630; --accent-soft:#232d49;
   --ok:#5fd38c; --ok-soft:#163a26; --ng:#ff8a94; --ng-soft:#4a222a; --case:#3a3220; --case-line:#b8922e;
   color-scheme:dark}
+:root[data-icon="green"]{--accent:#1f9d55;--accent-soft:#dff5e8}
+:root[data-icon="orange"]{--accent:#e8731f;--accent-soft:#fdebdc}
+:root[data-icon="purple"]{--accent:#7b4fd6;--accent-soft:#ece4fb}
+@media (prefers-color-scheme:dark){
+  :root[data-icon="green"]:not([data-theme="light"]){--accent:#5fd38c;--accent-ink:#0f2a1a;--accent-soft:#163a26}
+  :root[data-icon="orange"]:not([data-theme="light"]){--accent:#ffb070;--accent-ink:#2a1708;--accent-soft:#3d2812}
+  :root[data-icon="purple"]:not([data-theme="light"]){--accent:#b89cff;--accent-ink:#1d1233;--accent-soft:#2c2246}}
+:root[data-theme="dark"][data-icon="green"]{--accent:#5fd38c;--accent-ink:#0f2a1a;--accent-soft:#163a26}
+:root[data-theme="dark"][data-icon="orange"]{--accent:#ffb070;--accent-ink:#2a1708;--accent-soft:#3d2812}
+:root[data-theme="dark"][data-icon="purple"]{--accent:#b89cff;--accent-ink:#1d1233;--accent-soft:#2c2246}
+.iconpick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.iconpick button{border:2px solid var(--line);border-radius:14px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.85rem;background:var(--card)}
+.iconpick button img{width:52px;height:52px;border-radius:12px}
+.iconpick button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.howto{font-size:.9rem;line-height:1.7;background:var(--accent-soft);border-radius:10px;padding:10px 12px}
+.howto b{font-family:var(--display)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -63,6 +95,23 @@ button.ghost{background:transparent;white-space:nowrap}
 .label{font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .chip{border-radius:999px;padding:8px 15px;font-size:.95rem}
 .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:700}
+/* course switch: two big tiles */
+.courses{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.safety{border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:.88rem}
+.safety summary{cursor:pointer;font-weight:700;font-family:var(--display);color:var(--accent)}
+.safety ul{margin:6px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px;color:var(--fg);line-height:1.6}
+.course{border:2px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;background:var(--card);display:flex;flex-direction:column;gap:2px;min-height:76px}
+.course b{font-family:var(--display);font-size:1.05rem;font-weight:800}
+.course span{font-size:.8rem;color:var(--muted);line-height:1.4}
+.course[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.course{position:relative}
+.new{position:absolute;top:-9px;right:10px;background:var(--ng);color:#fff;font-family:var(--display);font-weight:800;font-size:.72rem;letter-spacing:.06em;border-radius:999px;padding:1px 9px}
+.ver{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:0 8px;font-size:.75rem;color:var(--muted);margin-left:6px;cursor:pointer;background:var(--card)}
+.notice{border:2px solid var(--accent);background:var(--accent-soft)}
+.notice h2{display:flex;align-items:center;gap:8px}
+.notice h2 .vtag{background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:0 8px;font-size:.85rem}
+.notice ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px;font-size:.98rem}
+.notice .nicon{width:44px;height:44px;border-radius:10px;vertical-align:middle;margin-right:8px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
 .stat{background:var(--accent-soft);border-radius:12px;padding:10px 12px}
 .stat b{font-family:var(--display);font-size:1.5rem;font-weight:800;display:block;font-variant-numeric:tabular-nums}
@@ -87,11 +136,28 @@ button.ghost{background:transparent;white-space:nowrap}
 .case b{font-family:var(--display);display:block;font-size:.8rem;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
 .stmt{font-family:var(--display);font-size:1.3rem;font-weight:700;line-height:1.65;padding-block:6px}
 .stmt .q{color:var(--accent);margin-right:.2em}
+.stmt.mc{font-size:1.15rem}
+.stmt .two{display:inline-block;margin-left:.4em;border-radius:6px;padding:0 8px;background:var(--accent-soft);font-size:.85rem;vertical-align:middle}
 .verdict{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:1.3rem}
 .verdict.ok{background:var(--ok-soft);color:var(--ok)} .verdict.ng{background:var(--ng-soft);color:var(--ng)}
-.verdict small{font-family:var(--body);font-weight:500;font-size:.95rem;color:var(--fg)}
+.verdict{white-space:nowrap}.verdict small{font-family:var(--body);font-weight:500;font-size:.95rem;color:var(--fg);white-space:normal;flex:1;min-width:0}
 .reason{font-size:1rem;line-height:1.75}
 .nexthint{text-align:center;color:var(--muted);font-size:.85rem;padding-top:4px}
+/* 5-choice options */
+.opts{display:flex;flex-direction:column;gap:8px;list-style:none;margin:0;padding:0}
+.opt{display:grid;grid-template-columns:2.2em 1fr;gap:8px;align-items:start;width:100%;text-align:left;border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);font-size:1rem;line-height:1.6}
+.opt .num{font-family:var(--display);font-weight:800;color:var(--accent);font-size:1.05rem;line-height:1.6}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt.hit{border-color:var(--ok);background:var(--ok-soft)}
+.opt.miss{border-color:var(--ng);background:var(--ng-soft)}
+.opt[disabled]{cursor:default}
+.explain{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.explain h3{font-size:.95rem}
+.notes{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:.95rem;line-height:1.65}
+.notes li{display:grid;grid-template-columns:2.2em 1fr;gap:6px}
+.notes li b{font-family:var(--display);color:var(--muted)}
+.notes li.ans b{color:var(--ok)}
+.src{font-size:.8rem;color:var(--muted)}
 /* fixed bottom bar */
 .bar-fixed{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(27,36,48,.08)}
 .bar-fixed .inner{max-width:640px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -101,6 +167,7 @@ button.ghost{background:transparent;white-space:nowrap}
 .ox-btn.hit{background:var(--ok-soft);border-color:var(--ok)} .ox-btn.miss{background:var(--ng-soft);border-color:var(--ng)}
 .ox-btn[disabled]{cursor:default;opacity:.9}
 .next-btn{grid-column:1/3;min-height:72px;font-size:1.2rem}
+.hint-bar{grid-column:1/3;min-height:72px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.95rem;text-align:center}
 .wronglist{display:flex;flex-direction:column;gap:8px;padding-left:1.2em;margin:0;font-size:.95rem}
 .wronglist li span{color:var(--muted);font-size:.85rem}
 .result-hero{text-align:center;display:flex;flex-direction:column;gap:6px;padding-block:8px}
@@ -108,7 +175,7 @@ button.ghost{background:transparent;white-space:nowrap}
 .msg{font-family:var(--display);font-weight:700;font-size:1.1rem}
 .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-@media (max-width:420px){.bar{grid-template-columns:3em 1fr 4em}.stmt{font-size:1.2rem}}
+@media (max-width:420px){.bar{grid-template-columns:3em 1fr 4em}.stmt{font-size:1.2rem}.stmt.mc{font-size:1.08rem}.courses{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -116,13 +183,30 @@ button.ghost{background:transparent;white-space:nowrap}
   <div class="topbar">
     <div class="brand">
       <h1>内部障害理学療法</h1>
-      <small>循環・呼吸・腎臓｜○×200問</small>
+      <small id="brand-sub">循環・呼吸・腎臓｜○×200問・練習問題100問<button class="ver" id="btn-ver" title="このアプリの版">v2.0</button></small>
     </div>
     <button class="ghost" id="btn-home" hidden>ホーム</button>
   </div>
 
   <!-- HOME -->
   <section id="home" class="stack">
+    <div class="card stack notice" id="notice" hidden>
+      <h2><span class="vtag">v2.0</span>アプリが新しくなりました</h2>
+      <p><img class="nicon" src="./icons/icon-192.png" alt="">アイコンの絵柄が「○×」から「○×と5つの選択肢」に変わりました（新しく入れ直した人のホーム画面に表示されます）。</p>
+      <ul>
+        <li><b>練習問題100問（5肢）</b>のコースを追加。配付資料と同じ番号・同じ選択肢で、解説つき。</li>
+        <li>ホームで<b>コースを選ぶ</b>（○×200問／練習問題100問）。記録はコースごとに分かれ、これまでの○×の記録はそのまま。</li>
+        <li>「間違えた問題」は正解できるまで残るので、繰り返して弱点をなくせます。</li>
+        <li>ホーム下の<b>アイコンと色を選ぶ</b>で、アプリの色を4色から選べます。選んだ色で「ホーム画面に追加」すると、その色のアイコンになります。</li>
+      </ul>
+      <p class="sel-count">更新日 2026-10-30。通信がある場所で開くと自動で最新版になります。</p>
+      <div class="actions"><button class="primary" id="btn-notice-ok">閉じる</button></div>
+    </div>
+    <div class="card stack">
+      <h2>コースを選ぶ</h2>
+      <div class="courses" id="pick-course"></div>
+    </div>
+
     <div class="card stack">
       <h2>今日の1セット</h2>
       <div class="stack" style="gap:10px">
@@ -139,7 +223,7 @@ button.ghost{background:transparent;white-space:nowrap}
     </div>
 
     <div class="card stack">
-      <h2>これまでの記録</h2>
+      <h2 id="rec-title">これまでの記録</h2>
       <div class="stats">
         <div class="stat"><b id="st-solved">0</b><span>解いた回数</span></div>
         <div class="stat"><b id="st-rate">–</b><span>正答率</span></div>
@@ -148,8 +232,23 @@ button.ghost{background:transparent;white-space:nowrap}
       </div>
       <div class="bars" id="domain-bars"></div>
       <p class="sel-count" id="offline-badge" hidden>このアプリは端末に保存されました。通信がない場所でも、ホーム画面やブラウザから開いて使えます。</p>
-      <p class="sel-count">記録はこの端末のブラウザにだけ保存されます。○と×は、1セットの中で同じ数になるように出ます。</p>
-      <div class="actions"><button class="ghost" id="btn-reset">記録を消す</button></div>
+      <p class="sel-count" id="rec-note"></p>
+      <details class="safety">
+        <summary>このアプリとあなたのデータについて</summary>
+        <ul>
+          <li>ログインも登録もありません。名前・学籍番号・メールアドレスなどの個人情報は、入力する場所自体がありません。</li>
+          <li>解いた記録（正誤・回数・選んだ色）は、この端末のブラウザの中にだけ保存されます。先生にも、ほかの学生にも、どこにも送られません。</li>
+          <li>通信するのは、問題データをアプリのサイト（GitHub Pages）から読み込むときだけです。広告・解析ツール・外部サービスは使っていません。</li>
+          <li>記録を消したいときは「このコースの記録を消す」で、端末から完全に消えます。</li>
+        </ul>
+      </details>
+      <div class="actions"><button class="ghost" id="btn-reset">このコースの記録を消す</button></div>
+    </div>
+
+    <div class="card stack">
+      <h2>アイコンと色を選ぶ</h2>
+      <div class="iconpick" id="pick-icon"></div>
+      <div class="howto" id="icon-howto"></div>
     </div>
     <p class="foot" id="foot"></p>
   </section>
@@ -189,25 +288,80 @@ button.ghost{background:transparent;white-space:nowrap}
 (function(){
 "use strict";
 const $=s=>document.querySelector(s);
-const KEY="naibu-ox200-v1";
-let DATA=null, prog=load(), pool=[], idx=0, session=null, answered=false, timer=null;
+/* Two courses. Each has its own data file, its own progress key, its own pool rules.
+   ox : ○×200問（1問1答）— unchanged from v1 (progress key kept so nobody loses records)
+   mc : 練習問題100問（5肢択一・択二）— same numbering as the printed handout */
+const COURSES={
+  ox:{key:"naibu-ox200-v1",file:"./data.json",name:"○×200問",sub:"1問1答。○か×をタップ",n:[10,20,50,"all"],
+      modes:["random","case","wrong","new"],modeName:{random:"ランダム",case:"症例だけ",wrong:"間違えた問題",new:"未出題"}},
+  mc:{key:"naibu-q100-v1",file:"./q100.json",name:"練習問題100問",sub:"5肢択一・択二。配付資料と同じ番号",n:[5,10,20,"all"],
+      modes:["random","case","wrong","new","order"],modeName:{random:"ランダム",case:"症例だけ",wrong:"間違えた問題",new:"未出題",order:"番号順"}}
+};
+const APP_VERSION="2.0";
+const ICONS={blue:"青",green:"緑",orange:"オレンジ",purple:"紫"};
+const UIKEY="naibu-ui-v1";
+let ui={course:"ox",seenVer:"",opened:{},icon:""};
+let course="ox", DATA={}, prog={}, pool=[], idx=0, session=null, answered=false, timer=null, picked=[];
 const sel={domain:"すべて",n:20,mode:"random"};
 
-function load(){let p={hist:{},best:0,auto:false};try{const s=localStorage.getItem(KEY);if(s)p=Object.assign(p,JSON.parse(s))}catch(e){}return p}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(prog))}catch(e){}}
+function loadProg(k){let p={hist:{},best:0,auto:false};try{const s=localStorage.getItem(k);if(s)p=Object.assign(p,JSON.parse(s))}catch(e){}return p}
+function save(){try{localStorage.setItem(COURSES[course].key,JSON.stringify(prog))}catch(e){}}
+function loadUI(){try{const s=localStorage.getItem(UIKEY);if(s){ui=Object.assign(ui,JSON.parse(s));if(COURSES[ui.course])course=ui.course}}catch(e){}
+  const cur=window.__ICON||"blue";if(ui.icon!==cur){ui.icon=cur;saveUI()}}
+function applyIcon(name){
+  if(!ICONS[name])return;ui.icon=name;saveUI();
+  document.documentElement.setAttribute("data-icon",name);
+  const sfx=name==="blue"?"":"-"+name;
+  $("#lnk-manifest").href=name==="blue"?"./manifest.webmanifest":`./manifest-${name}.webmanifest`;
+  $("#lnk-icon").href=`./icons/icon${sfx}-192.png`;
+  $("#lnk-apple").href=name==="blue"?"./icons/apple-touch-icon.png":`./icons/apple-touch-icon-${name}.png`;
+  const t=document.querySelector('meta[name="theme-color"]');if(t)t.content=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||t.content;
+  try{const u=new URL(location.href);if(name==="blue")u.searchParams.delete("icon");else u.searchParams.set("icon",name);history.replaceState(null,"",u)}catch(e){}
+  renderIconPick();
+}
+function renderIconPick(){
+  const el=$("#pick-icon");el.innerHTML="";
+  Object.keys(ICONS).forEach(k=>{const b=document.createElement("button");b.setAttribute("aria-pressed",String(ui.icon===k));
+    b.innerHTML=`<img src="./icons/icon-${k}-192.png" alt=""><span>${ICONS[k]}</span>`;b.onclick=()=>applyIcon(k);el.appendChild(b)});
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  $("#icon-howto").innerHTML=`<b>選んだ色をホーム画面のアイコンにするには</b><br>${ios
+    ?"Safariで開いて、画面下の共有ボタン（□↑）→「ホーム画面に追加」。すでに入れてある人は、古いアイコンを長押しして削除してから追加し直すと、新しい色になります。"
+    :"ブラウザのメニュー（⋮）→「ホーム画面に追加」または「アプリをインストール」。すでに入れてある人は、いったん削除してから追加し直すと、新しい色になります。"}<br>アプリの中の色は、選んだ瞬間から変わります。記録は消えません。`;
+}
+function saveUI(){ui.course=course;try{localStorage.setItem(UIKEY,JSON.stringify(ui))}catch(e){}}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const isMC=()=>course==="mc";
+const D=()=>DATA[course];
 
 // ---- home ----
 function chips(el,items,key,fmt){el.innerHTML="";items.forEach(v=>{const b=document.createElement("button");b.className="chip";b.textContent=fmt?fmt(v):v;b.setAttribute("aria-pressed",String(sel[key]===v));b.onclick=()=>{sel[key]=v;chips(el,items,key,fmt);updatePool()};el.appendChild(b)})}
-function filtered(){return DATA.items.filter(q=>sel.domain==="すべて"||q.domain===sel.domain)}
+function courseTiles(){
+  const el=$("#pick-course");el.innerHTML="";
+  Object.keys(COURSES).forEach(k=>{
+    const c=COURSES[k],b=document.createElement("button");b.className="course";b.setAttribute("aria-pressed",String(course===k));
+    const cnt=DATA[k]?`${DATA[k].items.length}問`:"読み込み中";
+    const isNew=k==="mc"&&!(ui.opened&&ui.opened.mc);
+    b.innerHTML=`${isNew?`<span class="new">NEW</span>`:""}<b>${esc(c.name)}</b><span>${esc(c.sub)}・${cnt}</span>`;
+    b.onclick=()=>{if(course===k)return;course=k;ui.opened=ui.opened||{};ui.opened[k]=1;saveUI();prog=loadProg(c.key);sel.domain="すべて";sel.n=c.n[1];sel.mode="random";renderHome()};
+    el.appendChild(b);
+  });
+}
+function filtered(){return D().items.filter(q=>sel.domain==="すべて"||q.domain===sel.domain)}
 function buildPool(){
   let qs=filtered();const H=prog.hist;
   if(sel.mode==="case")qs=qs.filter(q=>q.case);
   if(sel.mode==="wrong")qs=qs.filter(q=>{const h=H[q.id];return h&&h.w>0&&h.last!=="ok"});
   if(sel.mode==="new")qs=qs.filter(q=>!H[q.id]);
-  const t=shuffle(qs.filter(q=>q.answer)),f=shuffle(qs.filter(q=>!q.answer));
   const n=sel.n==="all"?qs.length:Math.min(sel.n,qs.length);
+  if(isMC()){
+    if(sel.mode==="order"){ // 番号順: continue from the first question not yet answered correctly this round
+      const start=qs.findIndex(q=>!H[q.id]);const s=start<0?0:start;
+      return qs.slice(s,s+n).concat(qs.slice(0,Math.max(0,n-(qs.length-s))));
+    }
+    return shuffle(qs).slice(0,n);
+  }
+  const t=shuffle(qs.filter(q=>q.answer)),f=shuffle(qs.filter(q=>!q.answer));
   const half=Math.min(Math.floor(n/2),t.length,f.length);
   let out=t.slice(0,half).concat(f.slice(0,half));
   const rest=shuffle(t.slice(half).concat(f.slice(half)));
@@ -221,63 +375,127 @@ function updatePool(){
   if(sel.mode==="case")t=`症例問題 ${base.filter(q=>q.case).length}問`;
   if(sel.mode==="wrong")t=`間違えたままの問題 ${pool.length}問`;
   if(sel.mode==="new")t=`まだ解いていない問題 ${pool.length}問`;
+  if(sel.mode==="order"&&pool.length)t=`問${pool[0].n}から番号順`;
   $("#pool-info").textContent=t+`／今回 ${pool.length}問`;
   $("#btn-start").disabled=pool.length===0;
 }
 function renderHome(){
-  chips($("#pick-domain"),["すべて",...DATA.meta.domains],"domain");
-  chips($("#pick-n"),[10,20,50,"all"],"n",v=>v==="all"?"全部":v+"問");
-  chips($("#pick-mode"),["random","case","wrong","new"],"mode",v=>({random:"ランダム",case:"症例だけ",wrong:"間違えた問題",new:"未出題"}[v]));
+  const c=COURSES[course],d=D();
+  courseTiles();renderIconPick();
+  $("#notice").hidden=ui.seenVer===APP_VERSION;
+  chips($("#pick-domain"),["すべて",...d.meta.domains],"domain");
+  chips($("#pick-n"),c.n,"n",v=>v==="all"?"全部":v+"問");
+  chips($("#pick-mode"),c.modes,"mode",v=>c.modeName[v]);
   $("#opt-auto").checked=!!prog.auto;
   updatePool();
   const H=Object.values(prog.hist);
   const solved=H.reduce((a,h)=>a+h.r+h.w,0),ok=H.reduce((a,h)=>a+h.r,0);
+  $("#rec-title").textContent=`これまでの記録（${c.name}）`;
   $("#st-solved").textContent=solved;$("#st-rate").textContent=solved?Math.round(ok/solved*100)+"%":"–";
-  $("#st-best").textContent=prog.best||0;$("#st-cover").textContent=`${H.length}/${DATA.items.length}`;
+  $("#st-best").textContent=prog.best||0;$("#st-cover").textContent=`${H.length}/${d.items.length}`;
   const bars=$("#domain-bars");bars.innerHTML="";
-  DATA.meta.domains.forEach(d=>{
-    const qs=DATA.items.filter(q=>q.domain===d);let r=0,w=0;qs.forEach(q=>{const h=prog.hist[q.id];if(h){r+=h.r;w+=h.w}});
+  d.meta.domains.forEach(dm=>{
+    const qs=d.items.filter(q=>q.domain===dm);let r=0,w=0;qs.forEach(q=>{const h=prog.hist[q.id];if(h){r+=h.r;w+=h.w}});
     const pct=r+w?Math.round(r/(r+w)*100):0;
-    bars.insertAdjacentHTML("beforeend",`<div class="bar"><span style="text-align:left;color:var(--fg)">${d}</span><i><b style="width:${pct}%"></b></i><span>${r+w?pct+"%":"未着手"}</span></div>`);
+    bars.insertAdjacentHTML("beforeend",`<div class="bar"><span style="text-align:left;color:var(--fg)">${dm}</span><i><b style="width:${pct}%"></b></i><span>${r+w?pct+"%":"未着手"}</span></div>`);
   });
-  const nc=DATA.items.filter(q=>q.case).length;
-  $("#foot").textContent=`問題データ ${DATA.meta.version} 版・${DATA.items.length}問（症例問題${nc}問）`;
+  $("#rec-note").textContent=isMC()
+    ?"記録はこの端末のブラウザにだけ保存されます。選択肢の番号は配付資料と同じです。「間違えた問題」を正解できるまで繰り返すと、弱いところが残りません。"
+    :"記録はこの端末のブラウザにだけ保存されます。○と×は、1セットの中で同じ数になるように出ます。";
+  const nc=d.items.filter(q=>q.case).length;
+  $("#foot").textContent=`アプリ v${APP_VERSION}（2026-10-30）｜${c.name}：問題データ ${d.meta.version} 版・${d.items.length}問（症例問題${nc}問）`;
 }
 
-// ---- play ----
+// ---- play (shared) ----
 function show(id){["home","play","result"].forEach(s=>$("#"+s).hidden=s!==id);$("#btn-home").hidden=id==="home";$("#bar").hidden=id!=="play";document.body.classList.toggle("playing",id==="play");window.scrollTo({top:0})}
 function start(list){clearTimeout(timer);session={list,results:[],streak:0};idx=0;show("play");renderQ()}
 function renderQ(){
-  const q=session.list[idx];answered=false;
+  const q=session.list[idx];answered=false;picked=[];
   $("#q-pos").textContent=`${idx+1} / ${session.list.length}`;
   $("#q-bar").style.width=(idx/session.list.length*100)+"%";
   $("#q-streak").textContent=session.streak>=2?`${session.streak}連続正解中`:"";
-  const card=$("#q-card");card.classList.remove("answered");
-  card.innerHTML=`<div class="meta"><span class="tag">${esc(q.domain)}</span><span>${esc(q.topic)}</span></div>`
-    +(q.case?`<div class="case"><b>症例</b>${esc(q.case)}</div>`:"")
-    +`<p class="stmt"><span class="q">Q.</span>${esc(q.text)}</p><div id="feedback"></div>`;
-  $("#bar-inner").innerHTML=`<button class="ox-btn o" data-a="1">○<small>正しい</small></button><button class="ox-btn x" data-a="0">×<small>誤り</small></button>`;
-  document.querySelectorAll(".ox-btn").forEach(b=>b.onclick=()=>answer(q,b.dataset.a==="1"));
+  const card=$("#q-card");card.classList.remove("answered");card.onclick=null;
+  if(isMC())renderMC(q);else renderOX(q);
 }
-function answer(q,mine){
-  if(answered)return;answered=true;
-  const ok=mine===q.answer;
+function record(q,ok){
   const h=prog.hist[q.id]||(prog.hist[q.id]={r:0,w:0,last:""});
   if(ok){h.r++;h.last="ok";session.streak++;if(session.streak>(prog.best||0))prog.best=session.streak}else{h.w++;h.last="ng";session.streak=0}
-  save();session.results.push({q,ok,mine});
-  document.querySelectorAll(".ox-btn").forEach(b=>{b.setAttribute("disabled","");const v=b.dataset.a==="1";if(v===q.answer)b.classList.add("hit");else if(v===mine)b.classList.add("miss")});
-  const last=idx===session.list.length-1;
-  const praise=ok?(session.streak>=10?"10連続。身についている。":session.streak>=5?"絶好調。":"正解。"):"惜しい。理由を読んで次へ。";
-  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>答え：${q.answer?"○":"×"}　${praise}</small></div><p class="reason">${esc(q.reason)}</p><p class="nexthint">画面のどこかをタップして${last?"結果へ":"次へ"}</p>`;
+  save();
   $("#q-streak").textContent=session.streak>=2?`${session.streak}連続正解中`:"";
+}
+function praiseText(ok){return ok?(session.streak>=10?"10連続。身についている。":session.streak>=5?"絶好調。":"正解。"):"惜しい。理由を読んで次へ。"}
+function armNext(){
+  const last=idx===session.list.length-1;
   const card=$("#q-card");card.classList.add("answered");
   setTimeout(()=>{ // a beat so the verdict is seen before the bar becomes the next button
     $("#bar-inner").innerHTML=`<button class="primary next-btn" id="btn-next">${last?"結果を見る":"次の問題"}</button>`;
     $("#btn-next").onclick=next;
   },250);
-  card.onclick=e=>{if(answered)next()};
+  card.onclick=e=>{if(answered&&!e.target.closest("button"))next()};
+}
+
+// ---- ○× ----
+function renderOX(q){
+  const card=$("#q-card");
+  card.innerHTML=`<div class="meta"><span class="tag">${esc(q.domain)}</span><span>${esc(q.topic)}</span></div>`
+    +(q.case?`<div class="case"><b>症例</b>${esc(q.case)}</div>`:"")
+    +`<p class="stmt"><span class="q">Q.</span>${esc(q.text)}</p><div id="feedback"></div>`;
+  $("#bar-inner").innerHTML=`<button class="ox-btn o" data-a="1">○<small>正しい</small></button><button class="ox-btn x" data-a="0">×<small>誤り</small></button>`;
+  document.querySelectorAll(".ox-btn").forEach(b=>b.onclick=()=>answerOX(q,b.dataset.a==="1"));
+}
+function answerOX(q,mine){
+  if(answered)return;answered=true;
+  const ok=mine===q.answer;record(q,ok);session.results.push({q,ok,mine});
+  document.querySelectorAll(".ox-btn").forEach(b=>{b.setAttribute("disabled","");const v=b.dataset.a==="1";if(v===q.answer)b.classList.add("hit");else if(v===mine)b.classList.add("miss")});
+  const last=idx===session.list.length-1;
+  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>答え：${q.answer?"○":"×"}　${praiseText(ok)}</small></div><p class="reason">${esc(q.reason)}</p><p class="nexthint">画面のどこかをタップして${last?"結果へ":"次へ"}</p>`;
+  armNext();
   if(ok&&prog.auto){timer=setTimeout(next,1500)}
 }
+
+// ---- 5肢 ----
+function renderMC(q){
+  const two=q.answers.length===2;
+  const stem=esc(q.stem).replace(/2つ選べ。$/,"")+(two?`<span class="two">2つ選べ</span>`:"");
+  const card=$("#q-card");
+  card.innerHTML=`<div class="meta"><span class="tag">問${q.n}</span><span class="tag">${esc(q.domain)}</span><span>${esc(q.level)}${q.case?"・症例":""}${two?"・択二":"・択一"}</span></div>`
+    +`<p class="stmt mc">${q.case?`<span class="q">【症例】</span>`:""}${stem}</p>`
+    +`<ul class="opts">${q.options.map((o,i)=>`<li><button class="opt" data-i="${i+1}" aria-pressed="false"><span class="num">${i+1}</span><span>${esc(o)}</span></button></li>`).join("")}</ul><div id="feedback"></div>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>pick(q,+b.dataset.i));
+  setBarMC(q);
+}
+function setBarMC(q){
+  const two=q.answers.length===2;
+  if(!two){$("#bar-inner").innerHTML=`<div class="hint-bar">選択肢を1つタップすると答え合わせ</div>`;return}
+  const left=2-picked.length;
+  $("#bar-inner").innerHTML=`<button class="primary next-btn" id="btn-decide" ${left?"disabled":""}>${left?`あと${left}つ選ぶ`:"答え合わせ"}</button>`;
+  if(!left)$("#btn-decide").onclick=()=>answerMC(q);
+}
+function pick(q,i){
+  if(answered)return;
+  const two=q.answers.length===2;
+  if(!two){picked=[i];answerMC(q);return}
+  const at=picked.indexOf(i);
+  if(at>=0)picked.splice(at,1);else{if(picked.length>=2)return;picked.push(i)}
+  document.querySelectorAll(".opt").forEach(b=>b.setAttribute("aria-pressed",String(picked.includes(+b.dataset.i))));
+  setBarMC(q);
+}
+function answerMC(q){
+  if(answered)return;answered=true;
+  const mine=picked.slice().sort(),ans=q.answers.slice().sort();
+  const ok=mine.length===ans.length&&mine.every((v,k)=>v===ans[k]);
+  record(q,ok);session.results.push({q,ok,mine});
+  document.querySelectorAll(".opt").forEach(b=>{b.setAttribute("disabled","");const i=+b.dataset.i;b.setAttribute("aria-pressed","false");if(ans.includes(i))b.classList.add("hit");else if(mine.includes(i))b.classList.add("miss")});
+  const last=idx===session.list.length-1;
+  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>正答：${ans.join("・")}${ok?"":`（あなたの答え：${mine.join("・")||"なし"}）`}　${praiseText(ok)}</small></div>`
+    +`<div class="explain"><h3>学習ポイント</h3><p class="reason">${esc(q.point)}</p><h3>各選択肢の解説</h3><ul class="notes">${q.notes.map((t,i)=>`<li class="${ans.includes(i+1)?"ans":""}"><b>${ans.includes(i+1)?"★":""}${i+1}</b><span>${esc(t)}</span></li>`).join("")}</ul><p class="src">出典：${esc(q.src)}</p></div>`
+    +`<p class="nexthint">画面のどこかをタップして${last?"結果へ":"次へ"}</p>`;
+  armNext();
+  setTimeout(()=>{$("#feedback")?.scrollIntoView({behavior:"smooth",block:"start"})},60);
+  if(ok&&prog.auto){timer=setTimeout(next,1500)}
+}
+
+// ---- next / result ----
 function next(){
   if(!answered)return;clearTimeout(timer);$("#q-card").onclick=null;
   idx++;if(idx>=session.list.length)finish();else renderQ();
@@ -287,10 +505,12 @@ function finish(){
   $("#r-score").textContent=`${ok} / ${n}`;
   $("#r-msg").textContent=pct===100?"全問正解。":pct>=80?"よくできている。間違えた理由を読み直そう。":pct>=60?"あと一歩。弱い領域を選んでもう1セット。":"基礎から。領域を1つに絞って繰り返そう。";
   const bars=$("#r-bars");bars.innerHTML="";
-  DATA.meta.domains.forEach(d=>{const rs=R.filter(r=>r.q.domain===d);if(!rs.length)return;const o=rs.filter(r=>r.ok).length;const p=Math.round(o/rs.length*100);
+  D().meta.domains.forEach(d=>{const rs=R.filter(r=>r.q.domain===d);if(!rs.length)return;const o=rs.filter(r=>r.ok).length;const p=Math.round(o/rs.length*100);
     bars.insertAdjacentHTML("beforeend",`<div class="bar"><span style="text-align:left;color:var(--fg)">${d}</span><i><b style="width:${p}%"></b></i><span>${o}/${rs.length}</span></div>`)});
   const wrong=R.filter(r=>!r.ok);
-  $("#r-wrong").innerHTML=wrong.length?`<h3>間違えた問題</h3><ol class="wronglist">${wrong.map(r=>`<li>${esc(r.q.text)}<br><span>答え ${r.q.answer?"○":"×"}　${esc(r.q.reason)}</span></li>`).join("")}</ol>`:`<p>間違えた問題はありません。</p>`;
+  $("#r-wrong").innerHTML=wrong.length?`<h3>間違えた問題</h3><ol class="wronglist">${wrong.map(r=>isMC()
+      ?`<li>問${r.q.n}　${esc(r.q.stem)}<br><span>正答 ${r.q.answers.join("・")}　${esc(r.q.point)}</span></li>`
+      :`<li>${esc(r.q.text)}<br><span>答え ${r.q.answer?"○":"×"}　${esc(r.q.reason)}</span></li>`).join("")}</ol>`:`<p>間違えた問題はありません。</p>`;
   $("#btn-retry-wrong").hidden=!wrong.length;
   $("#btn-retry-wrong").onclick=()=>start(shuffle(wrong.map(r=>r.q)));
   $("#btn-again").onclick=()=>{updatePool();start(pool)};
@@ -301,14 +521,24 @@ function finish(){
 $("#btn-start").onclick=()=>{updatePool();start(pool)};
 $("#btn-home").onclick=()=>{clearTimeout(timer);renderHome();show("home")};
 $("#opt-auto").onchange=e=>{prog.auto=e.target.checked;save()};
-$("#btn-reset").onclick=()=>{const b=$("#btn-reset");if(b.dataset.arm){prog={hist:{},best:0,auto:prog.auto};save();renderHome();b.textContent="記録を消す";delete b.dataset.arm}else{b.dataset.arm="1";b.textContent="本当に消す？（もう一度押す）"}};
-document.addEventListener("keydown",e=>{ // tablets with a keyboard: o / x / Enter
+$("#btn-notice-ok").onclick=()=>{ui.seenVer=APP_VERSION;saveUI();$("#notice").hidden=true};
+$("#btn-ver").onclick=()=>{$("#notice").hidden=false;window.scrollTo({top:0,behavior:"smooth"})};
+$("#btn-reset").onclick=()=>{const b=$("#btn-reset");if(b.dataset.arm){prog={hist:{},best:0,auto:prog.auto};save();renderHome();b.textContent="このコースの記録を消す";delete b.dataset.arm}else{b.dataset.arm="1";b.textContent="本当に消す？（もう一度押す）"}};
+document.addEventListener("keydown",e=>{ // tablets with a keyboard: o / x / 1-5 / Enter
   if($("#play").hidden)return;
-  if(!answered){if(e.key==="o"||e.key==="O"||e.key==="ArrowLeft")document.querySelector(".ox-btn.o")?.click();if(e.key==="x"||e.key==="X"||e.key==="ArrowRight")document.querySelector(".ox-btn.x")?.click()}
+  if(!answered){
+    if(isMC()){if(/^[1-5]$/.test(e.key))document.querySelector(`.opt[data-i="${e.key}"]`)?.click();if(e.key==="Enter")document.querySelector("#btn-decide:not([disabled])")?.click()}
+    else{if(e.key==="o"||e.key==="O"||e.key==="ArrowLeft")document.querySelector(".ox-btn.o")?.click();if(e.key==="x"||e.key==="X"||e.key==="ArrowRight")document.querySelector(".ox-btn.x")?.click()}
+  }
   else if(e.key==="Enter"||e.key===" "||e.key==="ArrowRight"){e.preventDefault();next()}
 });
 
-fetch("./data.json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(d=>{DATA=d;renderHome()}).catch(()=>{
+loadUI();
+function fetchJSON(f){return fetch(f).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})}
+Promise.all([fetchJSON(COURSES.ox.file),fetchJSON(COURSES.mc.file).catch(()=>null)]).then(([ox,mc])=>{
+  DATA.ox=ox;if(mc)DATA.mc=mc;else{delete COURSES.mc;if(course==="mc")course="ox"}
+  prog=loadProg(COURSES[course].key);sel.n=COURSES[course].n[1];renderHome();
+}).catch(()=>{
   $("#home").innerHTML=`<div class="card"><h2>問題データを読み込めませんでした</h2><p>ページを開き直しても直らないときは、先生に連絡してください。</p></div>`;
 });
 
