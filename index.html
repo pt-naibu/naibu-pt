@@ -174,6 +174,34 @@ button.ghost{background:transparent;white-space:nowrap}
 .result-hero b{font-family:var(--display);font-size:3rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 .msg{font-family:var(--display);font-weight:700;font-size:1.1rem}
 .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.starbtn{margin-left:auto;border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:.85rem;background:var(--card);color:var(--muted);white-space:nowrap}
+.starbtn[aria-pressed="true"]{border-color:#e3a008;color:#b37400;background:#fff6d6;font-weight:700}
+:root[data-theme="dark"] .starbtn[aria-pressed="true"]{background:#3a3220;color:#ffd166}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .starbtn[aria-pressed="true"]{background:#3a3220;color:#ffd166}}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;color:var(--muted)}
+.day i{display:block;width:100%;max-width:38px;height:28px;border-radius:8px;background:var(--line)}
+.day.on i{background:var(--accent)}
+.day.today span{color:var(--fg);font-weight:700}
+.weak{display:flex;flex-direction:column;gap:8px}
+.weakrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.weakrow b{font-family:var(--display);font-size:.95rem;display:block}
+.weakrow span{font-size:.8rem;color:var(--muted)}
+.weakrow button{padding:6px 14px;font-size:.9rem}
+.search{width:100%;font:inherit;font-size:1rem;padding:10px 14px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg)}
+.search:focus{outline:none;border-color:var(--accent)}
+.blist{display:flex;flex-direction:column;gap:10px}
+.bitem{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card)}
+.bitem summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:4px}
+.bitem summary::-webkit-details-marker{display:none}
+.bitem summary .meta{font-size:.78rem}
+.bitem summary p{font-size:.98rem;line-height:1.6}
+.bitem .bans{margin-top:8px;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:8px}
+.bitem .ansline{font-family:var(--display);font-weight:800}
+.bitem .ansline.t{color:var(--ok)} .bitem .ansline.f{color:var(--ng)}
+.bitem ol{margin:0;padding-left:1.4em;font-size:.95rem}
+mark{background:#ffe58a;color:inherit;border-radius:3px;padding:0 1px}
+.bigbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media (max-width:420px){.bar{grid-template-columns:3em 1fr 4em}.stmt{font-size:1.2rem}.stmt.mc{font-size:1.08rem}.courses{grid-template-columns:1fr}}
 </style>
@@ -183,7 +211,7 @@ button.ghost{background:transparent;white-space:nowrap}
   <div class="topbar">
     <div class="brand">
       <h1>内部障害理学療法</h1>
-      <small id="brand-sub">循環・呼吸・腎臓｜○×200問・練習問題100問<button class="ver" id="btn-ver" title="このアプリの版">v2.0</button></small>
+      <small id="brand-sub">循環・呼吸・腎臓｜○×200問・練習問題100問<button class="ver" id="btn-ver" title="このアプリの版">v2.1</button></small>
     </div>
     <button class="ghost" id="btn-home" hidden>ホーム</button>
   </div>
@@ -191,15 +219,15 @@ button.ghost{background:transparent;white-space:nowrap}
   <!-- HOME -->
   <section id="home" class="stack">
     <div class="card stack notice" id="notice" hidden>
-      <h2><span class="vtag">v2.0</span>アプリが新しくなりました</h2>
-      <p><img class="nicon" src="./icons/icon-192.png" alt="">アイコンの絵柄が「○×」から「○×と5つの選択肢」に変わりました（新しく入れ直した人のホーム画面に表示されます）。</p>
+      <h2><span class="vtag">v2.1</span>学びやすくなりました</h2>
       <ul>
-        <li><b>練習問題100問（5肢）</b>のコースを追加。配付資料と同じ番号・同じ選択肢で、解説つき。</li>
-        <li>ホームで<b>コースを選ぶ</b>（○×200問／練習問題100問）。記録はコースごとに分かれ、これまでの○×の記録はそのまま。</li>
-        <li>「間違えた問題」は正解できるまで残るので、繰り返して弱点をなくせます。</li>
-        <li>ホーム下の<b>アイコンと色を選ぶ</b>で、アプリの色を4色から選べます。選んだ色で「ホーム画面に追加」すると、その色のアイコンになります。</li>
+        <li><b>苦手は2回続けて正解するまで残ります。</b>間違えた問題は「苦手」に入り、翌日にもう一度出ます。2回続けて正解すると卒業です（これまでに1回だけ正解した問題も、もう1回出ます）。</li>
+        <li><b>苦手なところ</b>：解いた記録から、正答率の低いトピックを順に表示。ボタン1つでそのトピックだけを練習できます。</li>
+        <li><b>★印</b>：解いている途中で「★あとで見直す」を押すと、「★印」の出し方でまとめて解けます。</li>
+        <li><b>解説を読む・調べる</b>：解かずに問題と解説を一覧で読めます。「Borg」「SpO2」などの言葉で検索もできます。</li>
+        <li><b>学習の記録</b>：この7日間に解いた日と、連続で学習した日数を表示します。</li>
       </ul>
-      <p class="sel-count">更新日 2026-10-30。通信がある場所で開くと自動で最新版になります。</p>
+      <p class="sel-count">これまでの記録はそのまま使えます。更新日 2026-11-14。通信がある場所で開くと自動で最新版になります。</p>
       <div class="actions"><button class="primary" id="btn-notice-ok">閉じる</button></div>
     </div>
     <div class="card stack">
@@ -220,6 +248,24 @@ button.ghost{background:transparent;white-space:nowrap}
       <label class="toggle"><input type="checkbox" id="opt-auto"> 正解したら1.5秒で自動で次へ（不正解は止まる）</label>
       <p class="sel-count" id="pool-info"></p>
       <div class="actions"><button class="primary" id="btn-start">スタート</button></div>
+    </div>
+
+    <div class="card stack" id="weak-card" hidden>
+      <h2>苦手なところ</h2>
+      <p class="sel-count" id="weak-note"></p>
+      <div class="weak" id="weak-list"></div>
+    </div>
+
+    <div class="card stack">
+      <h2>解説を読む・調べる</h2>
+      <p class="sel-count">解かずに問題と解説を読めます。言葉で検索できるので、実習や臨床で調べ直すときにも使えます。</p>
+      <button class="bigbtn" id="btn-browse">問題と解説の一覧を開く</button>
+    </div>
+
+    <div class="card stack">
+      <h2>学習の記録（この7日間）</h2>
+      <div class="days" id="days"></div>
+      <p class="sel-count" id="days-note"></p>
     </div>
 
     <div class="card stack">
@@ -262,6 +308,19 @@ button.ghost{background:transparent;white-space:nowrap}
     <div class="card stack qcard" id="q-card"></div>
   </section>
 
+  <!-- BROWSE -->
+  <section id="browse" class="stack" hidden>
+    <div class="card stack">
+      <h2 id="b-title">問題と解説の一覧</h2>
+      <input class="search" id="b-q" type="search" placeholder="言葉で探す（例：Borg、SpO2、透析）" autocomplete="off">
+      <div class="row" id="b-domain"></div>
+      <label class="toggle"><input type="checkbox" id="b-star"> ★印の問題だけ</label>
+      <p class="sel-count" id="b-info"></p>
+    </div>
+    <div class="blist" id="b-list"></div>
+    <div class="actions" style="justify-content:center"><button id="b-more" hidden>もっと見る</button></div>
+  </section>
+
   <!-- RESULT -->
   <section id="result" class="stack" hidden>
     <div class="card stack">
@@ -293,18 +352,18 @@ const $=s=>document.querySelector(s);
    mc : 練習問題100問（5肢択一・択二）— same numbering as the printed handout */
 const COURSES={
   ox:{key:"naibu-ox200-v1",file:"./data.json",name:"○×200問",sub:"1問1答。○か×をタップ",n:[10,20,50,"all"],
-      modes:["random","case","wrong","new"],modeName:{random:"ランダム",case:"症例だけ",wrong:"間違えた問題",new:"未出題"}},
+      modes:["random","case","wrong","new","star"],modeName:{random:"ランダム",case:"症例だけ",wrong:"苦手",new:"未出題",star:"★印"}},
   mc:{key:"naibu-q100-v1",file:"./q100.json",name:"練習問題100問",sub:"5肢択一・択二。配付資料と同じ番号",n:[5,10,20,"all"],
-      modes:["random","case","wrong","new","order"],modeName:{random:"ランダム",case:"症例だけ",wrong:"間違えた問題",new:"未出題",order:"番号順"}}
+      modes:["random","case","wrong","new","star","order"],modeName:{random:"ランダム",case:"症例だけ",wrong:"苦手",new:"未出題",star:"★印",order:"番号順"}}
 };
-const APP_VERSION="2.0";
+const APP_VERSION="2.1";
 const ICONS={blue:"青",green:"緑",orange:"オレンジ",purple:"紫"};
 const UIKEY="naibu-ui-v1";
-let ui={course:"ox",seenVer:"",opened:{},icon:""};
+let ui={course:"ox",seenVer:"",opened:{},icon:"",days:{}};
 let course="ox", DATA={}, prog={}, pool=[], idx=0, session=null, answered=false, timer=null, picked=[];
 const sel={domain:"すべて",n:20,mode:"random"};
 
-function loadProg(k){let p={hist:{},best:0,auto:false};try{const s=localStorage.getItem(k);if(s)p=Object.assign(p,JSON.parse(s))}catch(e){}return p}
+function loadProg(k){let p={hist:{},best:0,auto:false,star:{}};try{const s=localStorage.getItem(k);if(s)p=Object.assign(p,JSON.parse(s))}catch(e){}return p}
 function save(){try{localStorage.setItem(COURSES[course].key,JSON.stringify(prog))}catch(e){}}
 function loadUI(){try{const s=localStorage.getItem(UIKEY);if(s){ui=Object.assign(ui,JSON.parse(s));if(COURSES[ui.course])course=ui.course}}catch(e){}
   const cur=window.__ICON||"blue";if(ui.icon!==cur){ui.icon=cur;saveUI()}}
@@ -334,6 +393,47 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 const isMC=()=>course==="mc";
 const D=()=>DATA[course];
 
+// ---- v2.1: learning helpers ----
+/* 苦手の定着: h.s = 最後に間違えてからの連続正解数。2回続けて正解したら卒業。
+   v2.0までの記録には s がないので、最後が正解なら1回、不正解なら0回として扱う。
+   h.due = 次に出したい日（間違えたら当日、1回正解したら翌日）。 */
+function ymd(d){d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return ymd(d)}
+const MASTER=2;
+function okRun(h){return h.s!==undefined?h.s:(h.last==="ok"?1:0)}
+function isWeak(h){return !!h&&h.w>0&&okRun(h)<MASTER}
+function isDue(h){return !h.due||h.due<=ymd()}
+function starred(q){return !!(prog.star&&prog.star[q.id])}
+function toggleStar(q){prog.star=prog.star||{};if(prog.star[q.id])delete prog.star[q.id];else prog.star[q.id]=1;save()}
+/* トピック: ○×は topic（「症例：」を外してまとめる）、練習問題100問は 領域×レベル */
+function group(q){if(isMC())return q.domain+"・"+q.level;let t=String(q.topic||"").replace(/^症例：/,"");if(t==="急性期リハ")t="急性期リハビリテーション";return q.domain+"・"+t}
+function weakGroups(){
+  const G={};
+  D().items.forEach(q=>{const g=group(q),h=prog.hist[q.id];const o=G[g]||(G[g]={g,n:0,r:0,w:0,weak:0});o.n++;if(h){o.r+=h.r;o.w+=h.w;if(isWeak(h))o.weak++}});
+  return Object.values(G).filter(o=>o.r+o.w>=3).map(o=>Object.assign(o,{pct:Math.round(o.r/(o.r+o.w)*100)}))
+    .filter(o=>o.pct<80||o.weak>0).sort((a,b)=>a.pct-b.pct||b.weak-a.weak).slice(0,5);
+}
+function logDay(){ui.days=ui.days||{};const t=ymd();ui.days[t]=(ui.days[t]||0)+1;
+  const keep=addDays(-60);Object.keys(ui.days).forEach(k=>{if(k<keep)delete ui.days[k]});saveUI()}
+function renderDays(){
+  const el=$("#days");el.innerHTML="";const W="日月火水木金土";let week=0;
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=ymd(d),n=(ui.days||{})[k]||0;week+=n;
+    el.insertAdjacentHTML("beforeend",`<div class="day${n?" on":""}${i===0?" today":""}" title="${k}：${n}問"><i></i><span>${i===0?"今日":W[d.getDay()]}</span></div>`)}
+  let run=0;for(let i=((ui.days||{})[ymd()]?0:1);;i++){if((ui.days||{})[addDays(-i)])run++;else break}
+  $("#days-note").textContent=week?`この7日間で ${week}問（両コースの合計）。${run>=2?`${run}日連続で学習中。`:run===1?"続けて、明日も1セット。":""}`:"まだ記録がありません。1日1セットから始めよう。";
+}
+function renderWeak(){
+  const L=weakGroups(),card=$("#weak-card");card.hidden=!L.length;if(!L.length)return;
+  $("#weak-note").textContent=isMC()?"領域とレベルごとの正答率です（3回以上解いたところだけ）。低い順に表示しています。":"トピックごとの正答率です（3回以上解いたところだけ）。低い順に表示しています。";
+  const el=$("#weak-list");el.innerHTML="";
+  L.forEach(o=>{const row=document.createElement("div");row.className="weakrow";
+    row.innerHTML=`<div><b>${esc(o.g)}</b><span>正答率 ${o.pct}%${o.weak?`・苦手 ${o.weak}問`:""}・全${o.n}問</span></div><button>ここを練習</button>`;
+    row.querySelector("button").onclick=()=>{const qs=D().items.filter(q=>group(q)===o.g);
+      const weak=shuffle(qs.filter(q=>isWeak(prog.hist[q.id]))),rest=shuffle(qs.filter(q=>!isWeak(prog.hist[q.id])));
+      start(weak.concat(rest).slice(0,Math.max(10,weak.length)))};
+    el.appendChild(row)});
+}
+
 // ---- home ----
 function chips(el,items,key,fmt){el.innerHTML="";items.forEach(v=>{const b=document.createElement("button");b.className="chip";b.textContent=fmt?fmt(v):v;b.setAttribute("aria-pressed",String(sel[key]===v));b.onclick=()=>{sel[key]=v;chips(el,items,key,fmt);updatePool()};el.appendChild(b)})}
 function courseTiles(){
@@ -351,9 +451,14 @@ function filtered(){return D().items.filter(q=>sel.domain==="すべて"||q.domai
 function buildPool(){
   let qs=filtered();const H=prog.hist;
   if(sel.mode==="case")qs=qs.filter(q=>q.case);
-  if(sel.mode==="wrong")qs=qs.filter(q=>{const h=H[q.id];return h&&h.w>0&&h.last!=="ok"});
+  if(sel.mode==="wrong")qs=qs.filter(q=>isWeak(H[q.id]));
   if(sel.mode==="new")qs=qs.filter(q=>!H[q.id]);
+  if(sel.mode==="star")qs=qs.filter(starred);
   const n=sel.n==="all"?qs.length:Math.min(sel.n,qs.length);
+  if(sel.mode==="wrong"){ // 今日復習する問題（間違えた当日・1回正解した翌日以降）を先に
+    const due=shuffle(qs.filter(q=>isDue(H[q.id]))),later=shuffle(qs.filter(q=>!isDue(H[q.id])));
+    return due.concat(later).slice(0,n);
+  }
   if(isMC()){
     if(sel.mode==="order"){ // 番号順: continue from the first question not yet answered correctly this round
       const start=qs.findIndex(q=>!H[q.id]);const s=start<0?0:start;
@@ -373,7 +478,8 @@ function updatePool(){
   const base=filtered();
   let t=`対象 ${base.length}問`;
   if(sel.mode==="case")t=`症例問題 ${base.filter(q=>q.case).length}問`;
-  if(sel.mode==="wrong")t=`間違えたままの問題 ${pool.length}問`;
+  if(sel.mode==="wrong"){const w=base.filter(q=>isWeak(prog.hist[q.id]));t=`苦手 ${w.length}問（今日の復習 ${w.filter(q=>isDue(prog.hist[q.id])).length}問）・2回続けて正解で卒業`}
+  if(sel.mode==="star")t=`★印の問題 ${base.filter(starred).length}問`;
   if(sel.mode==="new")t=`まだ解いていない問題 ${pool.length}問`;
   if(sel.mode==="order"&&pool.length)t=`問${pool[0].n}から番号順`;
   $("#pool-info").textContent=t+`／今回 ${pool.length}問`;
@@ -387,7 +493,7 @@ function renderHome(){
   chips($("#pick-n"),c.n,"n",v=>v==="all"?"全部":v+"問");
   chips($("#pick-mode"),c.modes,"mode",v=>c.modeName[v]);
   $("#opt-auto").checked=!!prog.auto;
-  updatePool();
+  updatePool();renderWeak();renderDays();
   const H=Object.values(prog.hist);
   const solved=H.reduce((a,h)=>a+h.r+h.w,0),ok=H.reduce((a,h)=>a+h.r,0);
   $("#rec-title").textContent=`これまでの記録（${c.name}）`;
@@ -400,14 +506,14 @@ function renderHome(){
     bars.insertAdjacentHTML("beforeend",`<div class="bar"><span style="text-align:left;color:var(--fg)">${dm}</span><i><b style="width:${pct}%"></b></i><span>${r+w?pct+"%":"未着手"}</span></div>`);
   });
   $("#rec-note").textContent=isMC()
-    ?"記録はこの端末のブラウザにだけ保存されます。選択肢の番号は配付資料と同じです。「間違えた問題」を正解できるまで繰り返すと、弱いところが残りません。"
-    :"記録はこの端末のブラウザにだけ保存されます。○と×は、1セットの中で同じ数になるように出ます。";
+    ?"記録はこの端末のブラウザにだけ保存されます。選択肢の番号は配付資料と同じです。間違えた問題は「苦手」に入り、2回続けて正解するまで残ります。"
+    :"記録はこの端末のブラウザにだけ保存されます。○と×は、1セットの中で同じ数になるように出ます。間違えた問題は「苦手」に入り、2回続けて正解するまで残ります。";
   const nc=d.items.filter(q=>q.case).length;
-  $("#foot").textContent=`アプリ v${APP_VERSION}（2026-10-30）｜${c.name}：問題データ ${d.meta.version} 版・${d.items.length}問（症例問題${nc}問）`;
+  $("#foot").textContent=`アプリ v${APP_VERSION}（2026-11-14）｜${c.name}：問題データ ${d.meta.version} 版・${d.items.length}問（症例問題${nc}問）`;
 }
 
 // ---- play (shared) ----
-function show(id){["home","play","result"].forEach(s=>$("#"+s).hidden=s!==id);$("#btn-home").hidden=id==="home";$("#bar").hidden=id!=="play";document.body.classList.toggle("playing",id==="play");window.scrollTo({top:0})}
+function show(id){["home","play","result","browse"].forEach(s=>$("#"+s).hidden=s!==id);$("#btn-home").hidden=id==="home";$("#bar").hidden=id!=="play";document.body.classList.toggle("playing",id==="play");window.scrollTo({top:0})}
 function start(list){clearTimeout(timer);session={list,results:[],streak:0};idx=0;show("play");renderQ()}
 function renderQ(){
   const q=session.list[idx];answered=false;picked=[];
@@ -419,10 +525,15 @@ function renderQ(){
 }
 function record(q,ok){
   const h=prog.hist[q.id]||(prog.hist[q.id]={r:0,w:0,last:""});
-  if(ok){h.r++;h.last="ok";session.streak++;if(session.streak>(prog.best||0))prog.best=session.streak}else{h.w++;h.last="ng";session.streak=0}
-  save();
+  const run=okRun(h);
+  if(ok){h.r++;h.last="ok";h.s=run+1;if(h.w>0&&h.s<MASTER)h.due=addDays(1);else delete h.due;session.streak++;if(session.streak>(prog.best||0))prog.best=session.streak}
+  else{h.w++;h.last="ng";h.s=0;h.due=ymd();session.streak=0}
+  save();logDay();
   $("#q-streak").textContent=session.streak>=2?`${session.streak}連続正解中`:"";
 }
+function graduateText(q){const h=prog.hist[q.id];if(!h||!h.w)return"";if(h.last==="ok"&&okRun(h)===MASTER)return"苦手から卒業。";if(h.last==="ok")return"苦手：あと1回正解で卒業（明日また出ます）。";return"苦手に入りました。"}
+function starBtn(q){return `<button class="starbtn" id="btn-star" aria-pressed="${starred(q)}">${starred(q)?"★ 見直す":"☆ あとで見直す"}</button>`}
+function wireStar(q){const b=$("#btn-star");if(!b)return;b.onclick=e=>{e.stopPropagation();toggleStar(q);b.setAttribute("aria-pressed",String(starred(q)));b.textContent=starred(q)?"★ 見直す":"☆ あとで見直す"}}
 function praiseText(ok){return ok?(session.streak>=10?"10連続。身についている。":session.streak>=5?"絶好調。":"正解。"):"惜しい。理由を読んで次へ。"}
 function armNext(){
   const last=idx===session.list.length-1;
@@ -437,9 +548,10 @@ function armNext(){
 // ---- ○× ----
 function renderOX(q){
   const card=$("#q-card");
-  card.innerHTML=`<div class="meta"><span class="tag">${esc(q.domain)}</span><span>${esc(q.topic)}</span></div>`
+  card.innerHTML=`<div class="meta"><span class="tag">${esc(q.domain)}</span><span>${esc(q.topic)}</span>${starBtn(q)}</div>`
     +(q.case?`<div class="case"><b>症例</b>${esc(q.case)}</div>`:"")
     +`<p class="stmt"><span class="q">Q.</span>${esc(q.text)}</p><div id="feedback"></div>`;
+  wireStar(q);
   $("#bar-inner").innerHTML=`<button class="ox-btn o" data-a="1">○<small>正しい</small></button><button class="ox-btn x" data-a="0">×<small>誤り</small></button>`;
   document.querySelectorAll(".ox-btn").forEach(b=>b.onclick=()=>answerOX(q,b.dataset.a==="1"));
 }
@@ -448,7 +560,7 @@ function answerOX(q,mine){
   const ok=mine===q.answer;record(q,ok);session.results.push({q,ok,mine});
   document.querySelectorAll(".ox-btn").forEach(b=>{b.setAttribute("disabled","");const v=b.dataset.a==="1";if(v===q.answer)b.classList.add("hit");else if(v===mine)b.classList.add("miss")});
   const last=idx===session.list.length-1;
-  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>答え：${q.answer?"○":"×"}　${praiseText(ok)}</small></div><p class="reason">${esc(q.reason)}</p><p class="nexthint">画面のどこかをタップして${last?"結果へ":"次へ"}</p>`;
+  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>答え：${q.answer?"○":"×"}　${praiseText(ok)}${graduateText(q)}</small></div><p class="reason">${esc(q.reason)}</p><p class="nexthint">画面のどこかをタップして${last?"結果へ":"次へ"}</p>`;
   armNext();
   if(ok&&prog.auto){timer=setTimeout(next,1500)}
 }
@@ -458,11 +570,11 @@ function renderMC(q){
   const two=q.answers.length===2;
   const stem=esc(q.stem).replace(/2つ選べ。$/,"")+(two?`<span class="two">2つ選べ</span>`:"");
   const card=$("#q-card");
-  card.innerHTML=`<div class="meta"><span class="tag">問${q.n}</span><span class="tag">${esc(q.domain)}</span><span>${esc(q.level)}${q.case?"・症例":""}${two?"・択二":"・択一"}</span></div>`
+  card.innerHTML=`<div class="meta"><span class="tag">問${q.n}</span><span class="tag">${esc(q.domain)}</span><span>${esc(q.level)}${q.case?"・症例":""}${two?"・択二":"・択一"}</span>${starBtn(q)}</div>`
     +`<p class="stmt mc">${q.case?`<span class="q">【症例】</span>`:""}${stem}</p>`
     +`<ul class="opts">${q.options.map((o,i)=>`<li><button class="opt" data-i="${i+1}" aria-pressed="false"><span class="num">${i+1}</span><span>${esc(o)}</span></button></li>`).join("")}</ul><div id="feedback"></div>`;
   document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>pick(q,+b.dataset.i));
-  setBarMC(q);
+  wireStar(q);setBarMC(q);
 }
 function setBarMC(q){
   const two=q.answers.length===2;
@@ -487,7 +599,7 @@ function answerMC(q){
   record(q,ok);session.results.push({q,ok,mine});
   document.querySelectorAll(".opt").forEach(b=>{b.setAttribute("disabled","");const i=+b.dataset.i;b.setAttribute("aria-pressed","false");if(ans.includes(i))b.classList.add("hit");else if(mine.includes(i))b.classList.add("miss")});
   const last=idx===session.list.length-1;
-  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>正答：${ans.join("・")}${ok?"":`（あなたの答え：${mine.join("・")||"なし"}）`}　${praiseText(ok)}</small></div>`
+  $("#feedback").innerHTML=`<div class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解"}<small>正答：${ans.join("・")}${ok?"":`（あなたの答え：${mine.join("・")||"なし"}）`}　${praiseText(ok)}${graduateText(q)}</small></div>`
     +`<div class="explain"><h3>学習ポイント</h3><p class="reason">${esc(q.point)}</p><h3>各選択肢の解説</h3><ul class="notes">${q.notes.map((t,i)=>`<li class="${ans.includes(i+1)?"ans":""}"><b>${ans.includes(i+1)?"★":""}${i+1}</b><span>${esc(t)}</span></li>`).join("")}</ul><p class="src">出典：${esc(q.src)}</p></div>`
     +`<p class="nexthint">画面のどこかをタップして${last?"結果へ":"次へ"}</p>`;
   armNext();
@@ -517,13 +629,47 @@ function finish(){
   show("result");
 }
 
+// ---- browse (解説を読む・調べる) ----
+const B={q:"",domain:"すべて",star:false,limit:30};
+function norm(t){return String(t).normalize("NFKC").toLowerCase()}
+function hay(q){return norm(isMC()?[q.stem,...q.options,q.point,...q.notes,q.src,q.domain,q.level].join(" "):[q.case||"",q.text,q.reason,q.topic,q.domain].join(" "))}
+function hl(t){const s=esc(t),k=esc(B.q.trim());if(!k)return s;
+  const re=new RegExp(k.split(/\s+/).map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|"),"gi");return s.replace(re,m=>`<mark>${m}</mark>`)}
+function openBrowse(){B.limit=30;$("#b-title").textContent=`問題と解説の一覧（${COURSES[course].name}）`;$("#b-q").value=B.q;$("#b-star").checked=B.star;
+  chipsB();renderBrowse();show("browse")}
+function chipsB(){const el=$("#b-domain");el.innerHTML="";["すべて",...D().meta.domains].forEach(v=>{const b=document.createElement("button");b.className="chip";b.textContent=v;b.setAttribute("aria-pressed",String(B.domain===v));b.onclick=()=>{B.domain=v;B.limit=30;chipsB();renderBrowse()};el.appendChild(b)})}
+function renderBrowse(){
+  const words=norm(B.q).split(/\s+/).filter(Boolean);
+  const qs=D().items.filter(q=>(B.domain==="すべて"||q.domain===B.domain)&&(!B.star||starred(q))&&words.every(w=>hay(q).includes(w)));
+  $("#b-info").textContent=`${qs.length}問${qs.length>B.limit?`（${B.limit}問まで表示）`:""}。問題をタップすると答えと解説が開きます。`;
+  const el=$("#b-list");el.innerHTML="";
+  qs.slice(0,B.limit).forEach(q=>{
+    const h=prog.hist[q.id],tag=h?(isWeak(h)?"苦手":"解いた"):"未出題";
+    const d=document.createElement("details");d.className="bitem";if(words.length&&qs.length<=5)d.open=true;
+    const head=isMC()?`<span class="tag">問${q.n}</span><span class="tag">${esc(q.domain)}</span><span>${esc(q.level)}・${tag}</span>`:`<span class="tag">${esc(q.domain)}</span><span>${esc(q.topic)}・${tag}</span>`;
+    const body=isMC()
+      ?`<p>${q.case?"【症例】":""}${hl(q.stem)}</p>`
+      :`<p>${q.case?`<span class="sel-count">症例：${hl(q.case)}</span><br>`:""}${hl(q.text)}</p>`;
+    const ans=isMC()
+      ?`<ol>${q.options.map((o,i)=>`<li>${q.answers.includes(i+1)?"<b>★</b> ":""}${hl(o)}</li>`).join("")}</ol><p class="ansline t">正答：${q.answers.join("・")}</p><p class="reason">${hl(q.point)}</p><ul class="notes">${q.notes.map((t,i)=>`<li class="${q.answers.includes(i+1)?"ans":""}"><b>${i+1}</b><span>${hl(t)}</span></li>`).join("")}</ul><p class="src">出典：${esc(q.src)}</p>`
+      :`<p class="ansline ${q.answer?"t":"f"}">答え：${q.answer?"○（正しい）":"×（誤り）"}</p><p class="reason">${hl(q.reason)}</p>`;
+    d.innerHTML=`<summary><div class="meta">${head}</div>${body}</summary><div class="bans">${ans}<div class="actions"><button class="starbtn" aria-pressed="${starred(q)}">${starred(q)?"★ 見直す":"☆ あとで見直す"}</button></div></div>`;
+    const sb=d.querySelector(".starbtn");sb.onclick=()=>{toggleStar(q);sb.setAttribute("aria-pressed",String(starred(q)));sb.textContent=starred(q)?"★ 見直す":"☆ あとで見直す"};
+    el.appendChild(d)});
+  $("#b-more").hidden=qs.length<=B.limit;
+}
+$("#btn-browse").onclick=openBrowse;
+$("#b-q").oninput=e=>{B.q=e.target.value;B.limit=30;renderBrowse()};
+$("#b-star").onchange=e=>{B.star=e.target.checked;B.limit=30;renderBrowse()};
+$("#b-more").onclick=()=>{B.limit+=30;renderBrowse()};
+
 // ---- wiring ----
 $("#btn-start").onclick=()=>{updatePool();start(pool)};
 $("#btn-home").onclick=()=>{clearTimeout(timer);renderHome();show("home")};
 $("#opt-auto").onchange=e=>{prog.auto=e.target.checked;save()};
 $("#btn-notice-ok").onclick=()=>{ui.seenVer=APP_VERSION;saveUI();$("#notice").hidden=true};
 $("#btn-ver").onclick=()=>{$("#notice").hidden=false;window.scrollTo({top:0,behavior:"smooth"})};
-$("#btn-reset").onclick=()=>{const b=$("#btn-reset");if(b.dataset.arm){prog={hist:{},best:0,auto:prog.auto};save();renderHome();b.textContent="このコースの記録を消す";delete b.dataset.arm}else{b.dataset.arm="1";b.textContent="本当に消す？（もう一度押す）"}};
+$("#btn-reset").onclick=()=>{const b=$("#btn-reset");if(b.dataset.arm){prog={hist:{},best:0,auto:prog.auto,star:{}};save();renderHome();b.textContent="このコースの記録を消す";delete b.dataset.arm}else{b.dataset.arm="1";b.textContent="本当に消す？（もう一度押す）"}};
 document.addEventListener("keydown",e=>{ // tablets with a keyboard: o / x / 1-5 / Enter
   if($("#play").hidden)return;
   if(!answered){
